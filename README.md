@@ -1,6 +1,3 @@
-### Features
-
-
 ### API
 
 - Origin, Destination, Bike Stations, Marta
