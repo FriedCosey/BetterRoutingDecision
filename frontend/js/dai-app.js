@@ -214,6 +214,7 @@ $(function(){
           map.setMapTypeId('map_style');
           
           //click(map);
+          
         }
 
         initialize();           
@@ -575,7 +576,6 @@ $(function(){
                $('#Video-Display').attr('src', '');
                $('#function_but').show();
                change.innerHTML = "Select All";
-               //$('#fuck_off').hide();
                status[3]=0;
                status[0] = 0;
                markers.forEach(function(marker) {
@@ -713,7 +713,7 @@ $(function(){
                 var marker = new google.maps.Marker({
                     position:{ lat: lat, lng: lng },
                     map: map,
-                    title: "fat fuck",
+                    title: "bana",
                     label: val,
                     icon:'http://maps.google.com/mapfiles/kml/paddle/blu-blank.png',
                 });
@@ -815,6 +815,22 @@ $(function(){
                 var title = 'camera';
                 gg2listen = balala(icon , title);
             }
+            else if($('#start_add').hasClass('clickClass'))
+            {
+                google.maps.event.clearInstanceListeners(map);
+    //prompt("Stream URI: ");
+                icon = 'image/icons8-detective-64.png';
+                var title = 'start';
+                gg2listen = balala(icon , title);
+            }
+            else if($('#end_add').hasClass('clickClass'))
+            {
+                google.maps.event.clearInstanceListeners(map);
+    //prompt("Stream URI: ");
+                icon = 'image/icons8-iron-man-64.png';
+                var title = 'end';
+                gg2listen = balala(icon , title);
+            }
         });
 
         /*$('#cam_add').on('click', function(){
@@ -844,7 +860,8 @@ $(function(){
             });
       };
         
-
+        var startMarker = [];
+        var endMarker = [];
         function addIcon(lat, lng,icon_ ,title, URL)
         {          
         //deleteMarkers();
@@ -853,6 +870,57 @@ $(function(){
               return;
             if(title == 'obstacle' && !($('#ob_add').hasClass('clickClass')))
               return;
+            if(title == 'start' && !($('#start_add').hasClass('clickClass')))
+              return;
+            if(title == 'start' && ($('#start_add').hasClass('clickClass'))){
+                var marker = new google.maps.Marker({
+                    icon: icon_,
+                    position:{ lat: lat, lng: lng },
+                    map: map, 
+                    fillOpacity: 0.4,
+                    title: title,
+                    // yoo
+                    content: ""
+
+                    // yoo
+                //icon: pinImage
+                });
+                if(startMarker.length != 0){
+                    startMarker[0].setMap(null);
+                    startMarker[0] = marker;
+                }
+                else{
+                    startMarker.push(marker);
+                }
+               
+                return;
+            }
+            if(title == 'end' && !($('#end_add').hasClass('clickClass')))
+              return;
+            if(title == 'end' && ($('#end_add').hasClass('clickClass'))){
+                var marker = new google.maps.Marker({
+                    icon: icon_,
+                    position:{ lat: lat, lng: lng },
+                    map: map, 
+                    fillOpacity: 0.4,
+                    title: title,
+                    // yoo
+                    content: ""
+
+                    // yoo
+                //icon: pinImage
+                });
+                if(endMarker.length != 0){
+                    endMarker[0].setMap(null);
+                    endMarker[0] = marker;
+                }
+                else{
+                    endMarker.push(marker);
+                }
+               
+                return;
+            }
+
             bootbox.prompt(" ", function(result){ 
                 if(!result) return 0;
                 var marker = new google.maps.Marker({

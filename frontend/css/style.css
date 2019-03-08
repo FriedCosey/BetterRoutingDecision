@@ -3,6 +3,22 @@ html, body, #Location-map {
     height: 100%;
 }
 
+#container
+{
+    border-color: #000000;
+    border-width: 0.3px;
+    border-style: dashed;
+    box-shadow: inset -1px 0px 1px 2px rgba(0 ,0, 0, 1);
+    background-color: #000000;
+    position: fixed;
+    height:60%;
+    width:26%;
+    right: 5%;
+    top: 23%;
+    opacity: 0.7;
+}
+
+
 .button_s {    
     position: relative;
     border: none;
@@ -240,6 +256,22 @@ form, table {
     background-color: #227700;/*#7700FF; /* purple */
 }
 
+#button_sm4 {
+    background-color: #4CAF50;/*#9955FF; /* purple */
+    border-radius: 20px;    
+}
+#button_sm4:hover{
+    background-color: #227700;/*#7700FF; /* purple */
+}
+
+#button_sm5 {
+    background-color: #4CAF50;/*#9955FF; /* purple */
+    border-radius: 20px;    
+}
+#button_sm5:hover{
+    background-color: #227700;/*#7700FF; /* purple */
+}
+
 /*.function:hover .button{
   display: block;
 }*/
@@ -292,4 +324,101 @@ ul {
   margin: 0px;
   padding: 0px;
   list-style-type: none;
+}
+
+
+#text_wrapper
+{
+    background-color: rgba(32,43,80,0.6);
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    margin: 5%;
+    border-width: 1px;
+    box-shadow: inset 1px 1px 1px 1px rgba(0 ,0, 0, 1);
+    border-radius: 1px;
+    border-style: solid;
+}
+
+#markers_added
+{
+    background-color: #335786;
+    position: absolute;
+    width: 40%;
+    height: 62%;
+    top: 21%;
+    left: 55%;
+    /*margin-left: -40%;*/
+    border-width: 1px;
+    box-shadow: inset 1px 1px 1px 1px rgba(0 ,0, 0, 1);
+    border-radius: 1px;
+    border-style: solid;
+}
+
+#submit
+{
+    border-color: #000000;
+    position: absolute;
+    width: 75%;
+    height: 10%;
+    top: 85%;
+    left: 50%;
+    margin-left: -40%;
+    background-color: rgba(32,43,80,0.6);
+    border-width: 2px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+
+}
+
+#eq_instruction
+{
+    position: absolute;
+    width: 40%;
+    height: 15%;
+    top: 5%;
+    left: 55%;
+    background-color: #335786;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+    border-width: 1px;
+    border-radius: 1px;
+    border-style: solid;
+    border-color: #000000;
+
+}
+#eq_submit
+{
+    border-color: #000000;
+    position: absolute;
+    width: 40%;
+    height: 10%;
+    top: 85%;
+    left: 55%;
+    background-color: #335786;
+    border-width: 2px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px;
+    opacity: 0.5;
+    text-align: center;
+    vertical-align: middle;
 }
