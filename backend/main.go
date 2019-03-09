@@ -20,10 +20,10 @@ func main() {
 
 func handleReq() {
 	r := mux.NewRouter()
-	r.HandleFunc("/bike", getBikeStations(sendBikeStations)).Methods("GET")
-	r.HandleFunc("/dist/origin/bike", getBikeStations(computeOriginBike)).Methods("GET")
-	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET")
-
+    // r.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/")))
+	r.HandleFunc("/bike", getBikeStations(sendBikeStations)).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/origin/bike", getBikeStations(computeOriginBike)).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -124,11 +124,18 @@ func sendBikeStations(w http.ResponseWriter, r *http.Request) {
 	allData := context.GetAll(r)
 	stationCord := allData["stationCord"]
 	fmt.Println(stationCord)
-	w.Header().Set("Content-Type", "application/json")
+	/* w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(stationCord)
 	// result := map[string]interface{}{}
 	// fmt.Fprintf(w, "%v", stationCord)
+    */
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(stationCord)
 }
 
 func computeOriginMarta(w http.ResponseWriter, r *http.Request) {
@@ -154,7 +161,7 @@ func computeOriginMarta(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println(ik, flat, flng)
-	fmt.Println(stationCord)
+	// fmt.Println(stationCord)
 
 	type martaCord struct {
 		Key   string
@@ -191,8 +198,9 @@ func computeOriginMarta(w http.ResponseWriter, r *http.Request) {
 		ik--
 	}
 	fmt.Println(resCord)
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resCord)
 }
 func computeOriginBike(w http.ResponseWriter, r *http.Request) {
@@ -256,7 +264,7 @@ func computeOriginBike(w http.ResponseWriter, r *http.Request) {
 		ik--
 	}
 	fmt.Println(resCord)
-
+    w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resCord)

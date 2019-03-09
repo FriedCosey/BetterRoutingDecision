@@ -822,7 +822,6 @@ $(function(){
                 icon = 'image/icons8-detective-64.png';
                 var title = 'start';
                 gg2listen = balala(icon , title);
-                getClosetBikeStation(startMarker[0]);
             }
             else if($('#end_add').hasClass('clickClass'))
             {
@@ -893,7 +892,8 @@ $(function(){
                 else{
                     startMarker.push(marker);
                 }
-               
+                getClosetBikeStation(startMarker[0]);
+
                 return;
             }
             if(title == 'end' && !($('#end_add').hasClass('clickClass')))
@@ -960,7 +960,6 @@ $(function(){
         {
             console.log(markers.length);
             for(let i = 0; i < markers.length; i++){
-                console.log(markers[i].content);
                 let infowindow = new google.maps.InfoWindow({
                       content: markers[i].content
                 });
@@ -978,19 +977,26 @@ $(function(){
 
     /***************************************************************************************************************************************************************/     
     
+    
+
+    
     function getClosetBikeStation(marker){
-                
-        let ajaxInit = new XMLHttpRequest();
-        let url = "http://18.188.214.33:8080/dist/origin/bike?k=3&lat=33.76147456195493&lng=-84.36572268184585";
-        ajaxInit.open("GET", url, true); // True for sync
-        ajaxInit.setRequestHeader("content-type","application/json");
-        ajaxInit.onreadystatechange = function(){
-        if(ajaxInit.readyState == 4 && ajaxInit.status == 200)
-            var bikeStationJson = JSON.parse(ajaxInit.responseText);
-        console.log(bikeStationJson);
+        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=33.76147456195493&lng=-84.36572268184585", function(data){
+            console.log(data);
+        });
     }   
-    ajaxInit.send(null);
-}
+
+    $.get("http://localhost:8080/dist/origin/bike?k=2&lat=33.76147456195493&lng=-84.36572268184585", function(data){
+            console.log(data);
+        });
+
+        $.get("http://localhost:8080/bike", function(data){
+            console.log(data);
+        });
+   
+
+   
+
 });
 
 
