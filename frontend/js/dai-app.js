@@ -1025,6 +1025,7 @@ $(function(){
         }
     }
 
+    var bikeLine = [];
     function connectBike(){
         if(closeBike.length >= 4){
             for(let i = 0; i < closeBike.length; i++){
@@ -1048,6 +1049,26 @@ $(function(){
                 closeBike.push(markersLine);
             }
         }
+        $.get("http://localhost:8080/dist/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+            console.log(data[0].Coords);
+            polyCoordinates = [];
+            if(bikeLine.length > 0){
+                bikeLine[0].setVisible(false);
+                bikeLine.length = 0;
+            }
+            for(let i = 0; i < data[0].Coords.length; i++){
+                polyCoordinates.push({lat: data[0].Coords[i][0], lng: data[0].Coords[i][1]});
+            }
+            var markersLine = new google.maps.Polyline({     
+                path: polyCoordinates,
+                strokeColor: "#000000",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                visible:true
+            });
+            markersLine.setMap(map);
+            bikeLine.push(markersLine);
+        });
     }
 
 
@@ -1126,8 +1147,8 @@ $(function(){
             }
             closeMarta.length = 0;
         }
-        for(let i = 0; i < bikeOriginCoord.length; i++){
-            for(let j = 0; j < bikeDestCoord.length; j++){
+        for(let i = 0; i < martaOriginCoord.length; i++){
+            for(let j = 0; j < martaDestCoord.length; j++){
                 polyCoordinates = [];              
                 polyCoordinates.push({lat: martaOriginCoord[i][0], lng: martaOriginCoord[i][1]}); 
                 polyCoordinates.push({lat: martaDestCoord[j][0], lng: martaDestCoord[j][1]});             
