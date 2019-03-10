@@ -896,7 +896,7 @@ $(function(){
                     endMarker.push(marker);
                 }
                 getClosetBikeStation(endMarker[0], false);
-
+                getClosetMartaStation(endMarker[0], false);
                 return;
             }
 
@@ -970,7 +970,9 @@ $(function(){
 
     var closeOriginBike = [];
     var closeDestBike = [];
-
+    var closeBike = [];
+    var bikeOriginCoord = [];
+    var bikeDestCoord = [];
     function addClosestBike(marker, coord, start){   
         if(start){ // Origin  
             polyCoordinates = [];              
@@ -981,6 +983,7 @@ $(function(){
                     closeOriginBike[i].setVisible(false)
                 }
                 closeOriginBike.length = 0;
+                bikeOriginCoord.length = 0;
             }
 
             var markersLine = new google.maps.Polyline({     
@@ -992,6 +995,7 @@ $(function(){
             });
             markersLine.setMap(map);
             closeOriginBike.push(markersLine);
+            bikeOriginCoord.push(coord);
         }
         else{
             polyCoordinates = [];              
@@ -1002,6 +1006,7 @@ $(function(){
                     closeDestBike[i].setVisible(false)
                 }
                 closeDestBike.length = 0;
+                bikeDestCoord.length = 0;
             }
 
             var markersLine = new google.maps.Polyline({     
@@ -1013,6 +1018,35 @@ $(function(){
             });
             markersLine.setMap(map);
             closeDestBike.push(markersLine);
+            bikeDestCoord.push(coord);
+        }
+        if(bikeOriginCoord.length == 2 && bikeDestCoord.length == 2){
+            connectBike();
+        }
+    }
+
+    function connectBike(){
+        if(closeBike.length >= 4){
+            for(let i = 0; i < closeBike.length; i++){
+                closeBike[i].setVisible(false)
+            }
+            closeBike.length = 0;
+        }
+        for(let i = 0; i < bikeOriginCoord.length; i++){
+            for(let j = 0; j < bikeDestCoord.length; j++){
+                polyCoordinates = [];              
+                polyCoordinates.push({lat: bikeOriginCoord[i][0], lng: bikeOriginCoord[i][1]}); 
+                polyCoordinates.push({lat: bikeDestCoord[j][0], lng: bikeDestCoord[j][1]});             
+                var markersLine = new google.maps.Polyline({     
+                    path: polyCoordinates,
+                    strokeColor: "#4286f4",
+                    strokeOpacity: 1,
+                    strokeWeight: 2,
+                    visible:true
+                });
+                markersLine.setMap(map);
+                closeBike.push(markersLine);
+            }
         }
     }
 
@@ -1029,6 +1063,9 @@ $(function(){
 
     var closeOriginMarta = [];
     var closeDestMarta = [];
+    var closeMarta = [];
+    var martaOriginCoord = [];
+    var martaDestCoord = [];
 
     function addClosestMarta(marker, coord, start){   
         if(start){ // Origin  
@@ -1040,6 +1077,7 @@ $(function(){
                     closeOriginMarta[i].setVisible(false)
                 }
                 closeOriginMarta.length = 0;
+                martaOriginCoord.length = 0;
             }
 
             var markersLine = new google.maps.Polyline({     
@@ -1051,6 +1089,7 @@ $(function(){
             });
             markersLine.setMap(map);
             closeOriginMarta.push(markersLine);
+            martaOriginCoord.push(coord);
         }
         else{
             polyCoordinates = [];              
@@ -1061,19 +1100,49 @@ $(function(){
                     closeDestMarta[i].setVisible(false)
                 }
                 closeDestMarta.length = 0;
+                martaDestCoord.length = 0;
             }
 
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
-                strokeColor: "#4286f4",
+                strokeColor: "#f77b0e",
                 strokeOpacity: 1,
                 strokeWeight: 2,
                 visible:true
             });
             markersLine.setMap(map);
             closeDestMarta.push(markersLine);
+            martaDestCoord.push(coord);
         }
-        }   
+        if(martaOriginCoord.length == 2 && martaDestCoord.length == 2){
+            connectMarta();
+        }
+    }
+    
+    function connectMarta(){
+        if(closeMarta.length >= 4){
+            for(let i = 0; i < closeMarta.length; i++){
+                closeMarta[i].setVisible(false)
+            }
+            closeMarta.length = 0;
+        }
+        for(let i = 0; i < bikeOriginCoord.length; i++){
+            for(let j = 0; j < bikeDestCoord.length; j++){
+                polyCoordinates = [];              
+                polyCoordinates.push({lat: martaOriginCoord[i][0], lng: martaOriginCoord[i][1]}); 
+                polyCoordinates.push({lat: martaDestCoord[j][0], lng: martaDestCoord[j][1]});             
+                var markersLine = new google.maps.Polyline({     
+                    path: polyCoordinates,
+                    strokeColor: "#f77b0e",
+                    strokeOpacity: 1,
+                    strokeWeight: 2,
+                    visible:true
+                });
+                markersLine.setMap(map);
+                closeMarta.push(markersLine);
+            }
+        }
+    }
     
 
     
