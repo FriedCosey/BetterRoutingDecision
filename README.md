@@ -18,11 +18,10 @@ cd hostfrontend
 
 - backend
   - api implemented in main.go
-  [Any language is fine, flask, node, express]
-  [Need to add cors header]
-  node example:
-    https://github.com/FriedCosey/Swift-Webpage/blob/master/app.js
-    https://github.com/FriedCosey/ca1/blob/master/routes/user/course/query.js
+  - Any language is fine, flask, node, express ..... (Need to add cors header)
+  - node example:
+    - https://github.com/FriedCosey/Swift-Webpage/blob/master/app.js
+    - https://github.com/FriedCosey/ca1/blob/master/routes/user/course/query.js
   
 - hostfrontend
   - I created another server to host frontend static files because I want to test cross-origin
