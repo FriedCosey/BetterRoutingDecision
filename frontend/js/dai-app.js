@@ -947,7 +947,7 @@ $(function(){
 
     
     function getClosetBikeStation(marker, start){
-        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+        $.get("http://18.188.214.33:3000/t:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
