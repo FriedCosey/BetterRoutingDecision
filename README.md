@@ -19,7 +19,7 @@ cd hostfrontend
 - backend
   - api implemented in main.go
   - Any language is fine, flask, node, express ..... (Need to add cors header)
-  - node example:
+  - maybe something like:
     - https://github.com/FriedCosey/Swift-Webpage/blob/master/app.js
     - https://github.com/FriedCosey/ca1/blob/master/routes/user/course/query.js
   
