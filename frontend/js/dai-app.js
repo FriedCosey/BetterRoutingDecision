@@ -276,53 +276,7 @@ $(function(){
                 icon: 'http://maps.google.com/mapfiles/kml/paddle/purple-stars.png'
             }
         };
-        var features = [
-            {
-                position: new google.maps.LatLng( 33.766296339949854, -84.38751223293974),
-                type: 'camera',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.788225, 120.998487),
-                type: 'camera',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.788312, 120.997101),
-                type: 'obstacle',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.789491, 120.995709),
-                type: 'obstacle',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.787957, 120.998568),
-                type: 'obstacle',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.789076, 120.998096),
-                type: 'obstacle',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.789627, 120.994984),
-                type: 'obstacle',
-                content: 'close'
-            },{
-                position: new google.maps.LatLng(24.787800, 120.998509),
-                type: 'obstacle',
-                content: 'close'
-            }/*,{
-                position: new google.maps.LatLng(24.7887725, 120.9951233333334),
-                type: 'dog1'
-            },{
-                position: new google.maps.LatLng(24.7878311, 120.9943021),
-                type: 'dog2'
-            },{
-                position: new google.maps.LatLng(24.7879711, 120.9931021),
-                type: 'cat1'
-            },{
-                position: new google.maps.LatLng(24.7876111, 120.9913021),
-                type: 'cat2'
-            },*/
-        ];
+      
         
 
     var ajaxInit = new XMLHttpRequest();
@@ -363,9 +317,14 @@ $(function(){
             
             if(type == "obstacle"){
                 s_name = stations[i].properties.STATION;
+                var image = {
+                    url: icons[type].icon,
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(15, 15),
+                };
                 var marker = new google.maps.Marker({
                     position:  new google.maps.LatLng(stations[i].geometry.coordinates[1], stations[i].geometry.coordinates[0]),
-                    icon: icons[type].icon,
+                    icon: image,
                     map: map,
                     title: type,
                     content: stations[i].properties.STATION,
@@ -375,9 +334,14 @@ $(function(){
             }
             else{
                 s_name = stations[i].properties.STATION_NAME;
+                var image = {
+                    url: icons[type].icon,
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(15, 15),
+                };
                 var marker = new google.maps.Marker({
                     position:  new google.maps.LatLng(stations[i].geometry.coordinates[1], stations[i].geometry.coordinates[0]),
-                    icon: icons[type].icon,
+                    icon: image,
                     map: map,
                     title: type,
                     content: stations[i].properties.STATION_NAME,
@@ -416,7 +380,7 @@ $(function(){
     }
 
    
-        
+        var features = [];
         
         // Create markers.
         features.forEach(function(feature) {
@@ -862,7 +826,7 @@ $(function(){
         
         var startMarker = [];
         var endMarker = [];
-        function addIcon(lat, lng,icon_ ,title, URL)
+        function addIcon(lat, lng, icon_ ,title, URL)
         {          
         //deleteMarkers();
             // yoo
@@ -873,6 +837,7 @@ $(function(){
             if(title == 'start' && !($('#start_add').hasClass('clickClass')))
               return;
             if(title == 'start' && ($('#start_add').hasClass('clickClass'))){
+                
                 var marker = new google.maps.Marker({
                     icon: icon_,
                     position:{ lat: lat, lng: lng },
@@ -892,7 +857,7 @@ $(function(){
                 else{
                     startMarker.push(marker);
                 }
-                getClosetBikeStation(startMarker[0]);
+                getClosetBikeStation(startMarker[0], true);
 
                 return;
             }
@@ -918,7 +883,8 @@ $(function(){
                 else{
                     endMarker.push(marker);
                 }
-               
+                getClosetBikeStation(endMarker[0], false);
+
                 return;
             }
 
@@ -980,19 +946,64 @@ $(function(){
     
 
     
-    function getClosetBikeStation(marker){
-        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=33.76147456195493&lng=-84.36572268184585", function(data){
-            console.log(data);
+    function getClosetBikeStation(marker, start){
+        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+            // console.log(data);
+            for(let i = 0; i < data.length; i++){
+                // console.log(data[i].Coord);
+                addClosestLine(marker, data[i].Coord, start)
+            }
         });
     }   
 
-    $.get("http://localhost:8080/dist/origin/bike?k=2&lat=33.76147456195493&lng=-84.36572268184585", function(data){
-            console.log(data);
-        });
+    var closeOriginPoly = [];
+    var closeDestPoly = [];
 
-        $.get("http://localhost:8080/bike", function(data){
-            console.log(data);
-        });
+    function addClosestLine(marker, coord, start){   
+        if(start){ // Origin  
+            polyCoordinates = [];              
+            polyCoordinates.push(marker.position); 
+            polyCoordinates.push({lat: coord[0], lng: coord[1]});             
+            if(closeOriginPoly.length >= 2){
+                for(let i = 0; i < closeOriginPoly.length; i++){
+                    closeOriginPoly[i].setVisible(false)
+                }
+                closeOriginPoly.length = 0;
+            }
+
+            var markersLine = new google.maps.Polyline({     
+                path: polyCoordinates,
+                strokeColor: "#4286f4",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                visible:true
+            });
+            markersLine.setMap(map);
+            closeOriginPoly.push(markersLine);
+        }
+        else{
+            polyCoordinates = [];              
+            polyCoordinates.push(marker.position); 
+            polyCoordinates.push({lat: coord[0], lng: coord[1]});             
+            if(closeDestPoly.length >= 2){
+                for(let i = 0; i < closeDestPoly.length; i++){
+                    closeDestPoly[i].setVisible(false)
+                }
+                closeDestPoly.length = 0;
+            }
+
+            var markersLine = new google.maps.Polyline({     
+                path: polyCoordinates,
+                strokeColor: "#4286f4",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                visible:true
+            });
+            markersLine.setMap(map);
+            closeDestPoly.push(markersLine);
+        }
+  }
+        
    
 
    
