@@ -198,9 +198,9 @@ func computeOriginMarta(w http.ResponseWriter, r *http.Request) {
 		ik--
 	}
 	fmt.Println(resCord)
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resCord)
 }
 func computeOriginBike(w http.ResponseWriter, r *http.Request) {
