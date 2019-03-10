@@ -1,6 +1,6 @@
 ### Screenshot
 
-![image](https://user-images.githubusercontent.com/29709822/54017248-69862200-4153-11e9-978d-90859d17492f.png)
+![image](https://user-images.githubusercontent.com/29709822/54088076-0d2c2980-4330-11e9-8aab-dc12401d154e.png)
 
 ### API
 
@@ -16,9 +16,8 @@
 
 | Method | Path | Description |
 |------- | --------- | ------ |
-| get | /dist/origin/marta | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
-| get | /dist/origin/bike | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
-| get | /dist/bike/dest | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
-| get | /dist/marta/dest | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
-| get | /dist/bike/marta | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
-| get | /dist/marta/bike | parameter: k (stations), return {{stationName1: [cordLat, cordLng, distance]}, ... {stationNamek: [...]}}|
+| get | /dist/origin/marta | parameter: k (stations), return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]
+|
+| get | /dist/origin/bike | parameter: k (stations), return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
+| get | /dist/marta/dest | parameter: k (stations), return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
+| get | /dist/marta/bike | parameter: k (stations), return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
