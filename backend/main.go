@@ -23,6 +23,7 @@ func handleReq() {
     // r.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/")))
 	r.HandleFunc("/bike", getBikeStations(sendBikeStations)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/bike", getBikeStations(computeOriginBike)).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/walk/bike/walk", computeWalkBikeWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
@@ -203,6 +204,104 @@ func computeOriginMarta(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resCord)
 }
+
+func buildCandiBike(resJson []interface{}) map[string][]float64 {
+    candiCoord := map[string][]float64{}
+    for _, val := range resJson {
+        tmp := []float64{}
+        for _,  coord := range (val.(map[string]interface{})["Coord"].([]interface{})){
+            tmp = append(tmp, coord.(float64))
+        }
+        candiCoord[val.(map[string]interface{})["Name"].(string)] = tmp
+    }
+    // fmt.Println(originCoord)
+    return candiCoord
+}
+
+func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
+
+	k := r.URL.Query().Get("k")
+	lat1 := r.URL.Query().Get("lat1")
+	lng1 := r.URL.Query().Get("lng1")
+	lat2 := r.URL.Query().Get("lat2")
+	lng2 := r.URL.Query().Get("lng2")
+
+    content1, err := getDataFromApi("http://localhost:8080/dist/origin/bike?k=" + k + "&lat=" + lat1 + "&lng=" + lng1)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+	resJson1 := []interface{}{}
+	json.Unmarshal(content1, &resJson1)
+    originCoord := buildCandiBike(resJson1) 
+    // fmt.Println(originCoord)
+
+    content2, err := getDataFromApi("http://localhost:8080/dist/origin/bike?k=" + k + "&lat=" + lat2 + "&lng=" + lng2)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+	resJson2 := []interface{}{}
+	json.Unmarshal(content2, &resJson2)
+    destCoord := buildCandiBike(resJson2) 
+    // fmt.Println(destCoord)
+
+	flat1, err := strconv.ParseFloat(lat1, 64)
+	if err != nil {
+		http.Error(w, "lat parse error", http.StatusBadRequest)
+		return
+	}
+	flng1, err := strconv.ParseFloat(lng1, 64)
+	if err != nil {
+		http.Error(w, "lng parse error", http.StatusBadRequest)
+		return
+	}
+	flat2, err := strconv.ParseFloat(lat2, 64)
+	if err != nil {
+		http.Error(w, "lat parse error", http.StatusBadRequest)
+		return
+	}
+	flng2, err := strconv.ParseFloat(lng2, 64)
+	if err != nil {
+		http.Error(w, "lng parse error", http.StatusBadRequest)
+		return
+	}
+    origin := []float64{flat1, flng1}
+    dest := []float64{flat2, flng2}
+    type totalPath struct{
+        Stations []string
+        Coords [][]float64
+        TotalDist float64
+    }
+
+    pathPairs := []totalPath{}
+    for orgStat, orgCoord := range(originCoord){
+        for destStat, destCoord := range(destCoord){
+            totalDist := 0.
+            totalDist += calcDist(origin, orgCoord)
+            totalDist += calcDist(destCoord, orgCoord)
+            totalDist += calcDist(destCoord, dest)
+            tmpStat := []string{}
+            tmpStat = append(tmpStat, orgStat)
+            tmpStat = append(tmpStat, destStat)
+            tmpCoord := [][]float64{}
+            tmpCoord = append(tmpCoord, origin)
+            tmpCoord = append(tmpCoord, orgCoord)
+            tmpCoord = append(tmpCoord, destCoord)
+            tmpCoord = append(tmpCoord, dest)
+            pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist})
+        }
+    }
+	sort.Slice(pathPairs, func(i, j int) bool {
+		return pathPairs[i].TotalDist < pathPairs[j].TotalDist
+	})
+    fmt.Println("cosey", pathPairs[0])
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(pathPairs)
+}
+
 func computeOriginBike(w http.ResponseWriter, r *http.Request) {
 	allData := context.GetAll(r)
 	stationCord := allData["stationCord"]
