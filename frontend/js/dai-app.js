@@ -284,9 +284,10 @@ $(function(){
     ajaxInit.open("GET", url, true); // True for sync
     ajaxInit.setRequestHeader("content-type","application/json");
     ajaxInit.onreadystatechange = function(){
-        if(ajaxInit.readyState == 4 && ajaxInit.status == 200)
+        if(ajaxInit.readyState == 4 && ajaxInit.status == 200){
             var atlbikeJson = JSON.parse(ajaxInit.responseText);
-        processData(atlbikeJson, "camera");
+            processData(atlbikeJson, "camera");
+        }
     }   
     ajaxInit.send(null);
 
@@ -295,10 +296,12 @@ $(function(){
     ajaxInit2.open("GET", url2, true); // True for sync
     ajaxInit2.setRequestHeader("content-type","application/json");
     ajaxInit2.onreadystatechange = function(){
-        if(ajaxInit2.readyState == 4 && ajaxInit2.status == 200)
+        if(ajaxInit2.readyState == 4 && ajaxInit2.status == 200){
             var martaJson = JSON.parse(ajaxInit2.responseText);
-        processData(martaJson, "obstacle");
-        addListenertoObstacle();
+            processData(martaJson, "obstacle");
+            addListenertoObstacle();
+        }
+        // addListenertoObstacle();
 
     }
    
