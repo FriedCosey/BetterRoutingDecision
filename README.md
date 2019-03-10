@@ -1,3 +1,8 @@
+### Known Bugs
+- 最近的兩個點 (k = 2) 不一定是最佳, 但是當 (k = 全部的點) -> brute force 會是最佳, 所以要越準確就是跟 k 值有關 (報告可以討論 (?))
+- 兩個點的直線距離會穿過建築物 (這個路線不存在) 需要繞過建築物, 但是如果考慮繞過建築物的路線, 就不能單純算兩點最短距離, 可能需要丟到 google map api 看繞過建築物時間/距離 -> 可以 argue 我們假設這路線存在或是只是 approximation (?)
+
+
 ### Screenshot
 
 ![image](https://user-images.githubusercontent.com/29709822/54088076-0d2c2980-4330-11e9-8aab-dc12401d154e.png)
