@@ -24,6 +24,7 @@ func handleReq() {
 	r.HandleFunc("/bike", getBikeStations(sendBikeStations)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/bike", getBikeStations(computeOriginBike)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/walk/bike/walk", computeWalkBikeWalk).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/walk/marta/walk", computeWalkMartaWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
@@ -295,7 +296,6 @@ func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 	sort.Slice(pathPairs, func(i, j int) bool {
 		return pathPairs[i].TotalDist < pathPairs[j].TotalDist
 	})
-    fmt.Println("cosey", pathPairs[0])
     w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

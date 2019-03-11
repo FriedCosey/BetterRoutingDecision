@@ -955,7 +955,7 @@ $(function(){
 
     /***************************************************************************************************************************************************************/     
     
-    
+    var barDom = $('#rightbar > span');
 
     
     function getClosetBikeStation(marker, start){
@@ -989,7 +989,7 @@ $(function(){
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
                 strokeColor: "#4286f4",
-                strokeOpacity: 1,
+                strokeOpacity: 0.1,
                 strokeWeight: 2,
                 visible:true
             });
@@ -1012,7 +1012,7 @@ $(function(){
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
                 strokeColor: "#4286f4",
-                strokeOpacity: 1,
+                strokeOpacity: 0.1,
                 strokeWeight: 2,
                 visible:true
             });
@@ -1041,7 +1041,7 @@ $(function(){
                 var markersLine = new google.maps.Polyline({     
                     path: polyCoordinates,
                     strokeColor: "#4286f4",
-                    strokeOpacity: 1,
+                    strokeOpacity: 0.1,
                     strokeWeight: 2,
                     visible:true
                 });
@@ -1068,6 +1068,7 @@ $(function(){
             });
             markersLine.setMap(map);
             bikeLine.push(markersLine);
+            barDom.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + " The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
         });
     }
 
@@ -1104,7 +1105,7 @@ $(function(){
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
                 strokeColor: "#f77b0e",
-                strokeOpacity: 1,
+                strokeOpacity: 0.1,
                 strokeWeight: 2,
                 visible:true
             });
@@ -1127,7 +1128,7 @@ $(function(){
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
                 strokeColor: "#f77b0e",
-                strokeOpacity: 1,
+                strokeOpacity: 0.1,
                 strokeWeight: 2,
                 visible:true
             });
@@ -1155,7 +1156,7 @@ $(function(){
                 var markersLine = new google.maps.Polyline({     
                     path: polyCoordinates,
                     strokeColor: "#f77b0e",
-                    strokeOpacity: 1,
+                    strokeOpacity: 0.1,
                     strokeWeight: 2,
                     visible:true
                 });
@@ -1164,9 +1165,20 @@ $(function(){
             }
         }
     }
-    
-
-    
+    var openedbar = true;
+    $('#openbar').on("click", function() {
+        if(openedbar) {
+            openedbar = false;
+            $('#openbar').text("<");
+            $('#rightbar').css("width", "0%");
+            $('#openbar').css("right", "0%");
+        } else {
+            openedbar = true;
+            $('#openbar').text(">");
+            $('#rightbar').css("width", "20%");
+            $('#openbar').css("right", "20%");
+        }
+      });
 
 });
 

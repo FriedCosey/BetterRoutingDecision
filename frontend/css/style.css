@@ -422,3 +422,46 @@ ul {
     text-align: center;
     vertical-align: middle;
 }
+
+#rightbar {
+    width: 12%;
+    height: 80%;
+    opacity: 0.5;
+    background-color: #227700;
+    border-radius: 5%;
+    position: absolute;
+    right: 0%;
+}
+
+#rightbar {
+    width: 20%;
+    height: 80%;
+    opacity: 0.5;
+    background-color: #227700;
+    position: absolute;
+    right: 0%;
+}
+
+#openbar {
+    right: 20%;
+    height: 5%;
+    width: 3%;
+    margin-top: 5%;
+    text-align: center;
+    background-color: #227700;
+    opacity: 0.6;
+    border-top-left-radius: 23%;
+    border-bottom-left-radius: 23%;
+    position: absolute;
+    font-size: 20px;
+}
+
+#rightbar *{
+    padding: 5%;
+    display: inline-block;
+    color: #ffffff;
+}
+
+#openbar:hover{
+    opacity: 1;
+}
