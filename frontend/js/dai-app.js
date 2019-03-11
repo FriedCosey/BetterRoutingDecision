@@ -1050,7 +1050,7 @@ $(function(){
                 closeBike.push(markersLine);
             }
         }
-        $.get("http://localhost:8080/dist/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://18.188.214.33:8080/dist/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(bikeLine.length > 0){
@@ -1166,7 +1166,7 @@ $(function(){
                 closeMarta.push(markersLine);
             }
         }
-        $.get("http://localhost:8080/dist/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://18.188.214.33:8080/dist/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(martaLine.length > 0){
