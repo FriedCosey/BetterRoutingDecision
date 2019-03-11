@@ -955,7 +955,8 @@ $(function(){
 
     /***************************************************************************************************************************************************************/     
     
-    var barDom = $('#rightbar > span');
+    var barDomBike = $('#rightbar span:nth-child(1)');
+    var barDomMarta = $('#rightbar span:nth-child(2)');
 
     
     function getClosetBikeStation(marker, start){
@@ -1061,14 +1062,14 @@ $(function(){
             }
             var markersLine = new google.maps.Polyline({     
                 path: polyCoordinates,
-                strokeColor: "#000000",
+                strokeColor: "#4286f4",
                 strokeOpacity: 1,
                 strokeWeight: 2,
                 visible:true
             });
             markersLine.setMap(map);
             bikeLine.push(markersLine);
-            barDom.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + " The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
+            barDomBike.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + ". The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
         });
     }
 
@@ -1141,6 +1142,7 @@ $(function(){
         }
     }
     
+    var martaLine = [];
     function connectMarta(){
         if(closeMarta.length >= 4){
             for(let i = 0; i < closeMarta.length; i++){
@@ -1164,6 +1166,27 @@ $(function(){
                 closeMarta.push(markersLine);
             }
         }
+        $.get("http://localhost:8080/dist/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+            console.log(data[0].Coords);
+            polyCoordinates = [];
+            if(martaLine.length > 0){
+                martaLine[0].setVisible(false);
+                martaLine.length = 0;
+            }
+            for(let i = 0; i < data[0].Coords.length; i++){
+                polyCoordinates.push({lat: data[0].Coords[i][0], lng: data[0].Coords[i][1]});
+            }
+            var markersLine = new google.maps.Polyline({     
+                path: polyCoordinates,
+                strokeColor: "#f77b0e",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+                visible:true
+            });
+            markersLine.setMap(map);
+            martaLine.push(markersLine);
+            barDomMarta.text("Walk to " + data[0].Stations[0] + " and take Marta to " + data[0].Stations[1] + ". The total distance of walking excluding taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters.");
+        });
     }
     var openedbar = true;
     $('#openbar').on("click", function() {
