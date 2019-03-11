@@ -278,7 +278,7 @@ $(function(){
         };
       
         
-
+    var getBothData = false;
     var ajaxInit = new XMLHttpRequest();
     var url = "ATLBicycle_Share.geojson";
     ajaxInit.open("GET", url, true); // True for sync
@@ -287,6 +287,10 @@ $(function(){
         if(ajaxInit.readyState == 4 && ajaxInit.status == 200){
             var atlbikeJson = JSON.parse(ajaxInit.responseText);
             processData(atlbikeJson, "camera");
+            if(getBothData){
+                addListenertoObstacle();
+            }
+            getBothData = true;
         }
     }   
     ajaxInit.send(null);
@@ -299,7 +303,10 @@ $(function(){
         if(ajaxInit2.readyState == 4 && ajaxInit2.status == 200){
             var martaJson = JSON.parse(ajaxInit2.responseText);
             processData(martaJson, "obstacle");
-            addListenertoObstacle();
+            if(getBothData){
+                addListenertoObstacle();
+            }
+            getBothData = true;
         }
         // addListenertoObstacle();
 
