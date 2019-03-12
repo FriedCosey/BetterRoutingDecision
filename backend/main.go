@@ -26,6 +26,7 @@ func handleReq() {
 	r.HandleFunc("/dist/walk/bike/walk", computeWalkBikeWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/walk/marta/walk", computeWalkMartaWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/bike/marta", computeBikeMarta).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -350,6 +351,7 @@ func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 	}
     origin := []float64{flat1, flng1}
     dest := []float64{flat2, flng2}
+
     type totalPath struct{
         Stations []string
         Coords [][]float64
@@ -448,6 +450,83 @@ func computeOriginBike(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resCord)
+}
+
+func isBikeStation(coord []float64, r *http.Request) bool {
+	content, err := getDataFromApi("https://opendata.arcgis.com/datasets/f5b90fe709aa466084dfe2674118e426_27.geojson")
+	if err != nil {
+		return false
+	}
+	stationCord := buildBikeMap(content)
+
+	// Reduce API calling
+	context.Set(r, "bikeStationCord", stationCord)
+
+	for _, v := range stationCord {
+		if coord[0] == v[0] && coord[1] == v[1]{
+			return true
+		}
+	}
+	return false
+}
+
+func isMartaStation(coord []float64, r *http.Request) bool {
+	content, err := getDataFromApi("https://opendata.arcgis.com/datasets/7b752dcfca54486c8290b399340a407c_17.geojson")
+	if err != nil {
+		return false
+	}
+	stationCord := buildMartaMap(content)
+
+	// Reduce API calling
+	context.Set(r, "martaStationCord", stationCord)
+
+	for _, v := range stationCord {
+		if coord[0] == v[0] && coord[1] == v[1]{
+			return true
+		}
+	}
+	return false
+}
+
+func computeBikeMarta(w http.ResponseWriter, r *http.Request) {
+	lat1 := r.URL.Query().Get("lat1")
+	lng1 := r.URL.Query().Get("lng1")
+	lat2 := r.URL.Query().Get("lat2")
+	lng2 := r.URL.Query().Get("lng2")
+
+	flat1, errlat1 := strconv.ParseFloat(lat1, 64)
+	flng1, errlng1 := strconv.ParseFloat(lng1, 64)
+	flat2, errlat2 := strconv.ParseFloat(lat2, 64)
+	flng2, errlng2 := strconv.ParseFloat(lng2, 64)
+	if errlat1 != nil || errlng1 != nil || errlat2 != nil || errlng2 != nil{
+		http.Error(w, "BMB parse error", http.StatusBadRequest)
+		return
+	}
+
+	origin := []float64{flat1, flng1}
+	dest := []float64{flat2, flng2}
+
+	if !isBikeStation(origin, r) || !isMartaStation(dest, r){
+		http.Error(w, "BMB origin is not bike station or dest is not marta station", http.StatusBadRequest)
+		return
+	}
+
+	allData := context.GetAll(r)
+	martaStationCord := allData["martaStationCord"]
+	if martaStationCord == nil{
+		http.Error(w, "BMB cannot find station in context", http.StatusBadRequest)
+		return		
+	}
+
+	context.Set(r, "stationCord", martaStationCord)
+
+	// Reconstruct url to reuse computerOriginMarta
+	q := r.URL.Query()
+	q.Add("lat", lat2)
+	q.Add("lng", lng2)
+	r.URL.RawQuery = q.Encode()
+	computeOriginMarta(w, r)
+	return
 }
 
 func rad(x float64) float64 {
