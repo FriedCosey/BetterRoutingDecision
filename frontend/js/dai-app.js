@@ -294,7 +294,7 @@ $(function(){
         }
     }   
     ajaxInit.send(null);
-
+    var markerContent = [];
     var ajaxInit2 = new XMLHttpRequest();
     var url2 = "MartaStations.geojson";
     ajaxInit2.open("GET", url2, true); // True for sync
@@ -341,6 +341,7 @@ $(function(){
                     visible: false
                 });
                 markers.push(marker);
+                markerContent[stations[i].properties.STATION] = marker; 
             }
             else{
                 s_name = stations[i].properties.STATION_NAME;
@@ -358,6 +359,7 @@ $(function(){
                     visible: false
                 });
                 markers.push(marker);
+                markerContent[stations[i].properties.STATION_NAME] = marker; 
             }
             /*
             var marker = new google.maps.Marker({
@@ -1034,6 +1036,7 @@ $(function(){
     }
 
     var bikeLine = [];
+    var bikeContent = [];
     function connectBike(){
         if(closeBike.length >= 4){
             for(let i = 0; i < closeBike.length; i++){
@@ -1063,6 +1066,14 @@ $(function(){
             if(bikeLine.length > 0){
                 bikeLine[0].setVisible(false);
                 bikeLine.length = 0;
+                let image = {
+                    url: "image/icons8-bicycle-50.png",
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(15, 15),
+                };
+                markerContent[bikeContent[0]].setIcon(image);
+                markerContent[bikeContent[1]].setIcon(image);
+                bikeContent.length = 0;
             }
             for(let i = 0; i < data[0].Coords.length; i++){
                 polyCoordinates.push({lat: data[0].Coords[i][0], lng: data[0].Coords[i][1]});
@@ -1074,6 +1085,15 @@ $(function(){
                 strokeWeight: 2,
                 visible:true
             });
+            let image = {
+                url: "image/icons8-bicycle-filled-50.png",
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(15, 15),
+            };
+            markerContent[data[0].Stations[1]].setIcon(image);
+            markerContent[data[0].Stations[0]].setIcon(image);
+            bikeContent.push(data[0].Stations[1]);
+            bikeContent.push(data[0].Stations[0]);
             markersLine.setMap(map);
             bikeLine.push(markersLine);
             barDomBike.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + ". The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
@@ -1150,6 +1170,7 @@ $(function(){
     }
     
     var martaLine = [];
+    var martaContent = [];
     function connectMarta(){
         if(closeMarta.length >= 4){
             for(let i = 0; i < closeMarta.length; i++){
@@ -1179,6 +1200,14 @@ $(function(){
             if(martaLine.length > 0){
                 martaLine[0].setVisible(false);
                 martaLine.length = 0;
+                let image = {
+                    url: "image/icons8-railway-station-24.png",
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(15, 15),
+                };
+                markerContent[martaContent[0]].setIcon(image);
+                markerContent[martaContent[1]].setIcon(image);
+                martaContent.length = 0;
             }
             for(let i = 0; i < data[0].Coords.length; i++){
                 polyCoordinates.push({lat: data[0].Coords[i][0], lng: data[0].Coords[i][1]});
@@ -1190,6 +1219,15 @@ $(function(){
                 strokeWeight: 2,
                 visible:true
             });
+            let image = {
+                url: "image/icons8-railway-station-48.png",
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(15, 15),
+            };
+            markerContent[data[0].Stations[1]].setIcon(image);
+            markerContent[data[0].Stations[0]].setIcon(image);
+            martaContent.push(data[0].Stations[1]);
+            martaContent.push(data[0].Stations[0]);
             markersLine.setMap(map);
             martaLine.push(markersLine);
             barDomMarta.text("Walk to " + data[0].Stations[0] + " and take Marta to " + data[0].Stations[1] + ". The total distance of walking excluding taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters.");
