@@ -27,6 +27,7 @@ func handleReq() {
 	r.HandleFunc("/dist/walk/marta/walk", computeWalkMartaWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/bike/marta", computeBikeMarta).Methods("GET", "OPTIONS")
+	r.HandleFunc("/dist/marta/bike", computeMartaBike).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -499,7 +500,7 @@ func computeBikeMarta(w http.ResponseWriter, r *http.Request) {
 	flat2, errlat2 := strconv.ParseFloat(lat2, 64)
 	flng2, errlng2 := strconv.ParseFloat(lng2, 64)
 	if errlat1 != nil || errlng1 != nil || errlat2 != nil || errlng2 != nil{
-		http.Error(w, "BMB parse error", http.StatusBadRequest)
+		http.Error(w, "BM parse error", http.StatusBadRequest)
 		return
 	}
 
@@ -507,14 +508,14 @@ func computeBikeMarta(w http.ResponseWriter, r *http.Request) {
 	dest := []float64{flat2, flng2}
 
 	if !isBikeStation(origin, r) || !isMartaStation(dest, r){
-		http.Error(w, "BMB origin is not bike station or dest is not marta station", http.StatusBadRequest)
+		http.Error(w, "BM origin is not bike station or dest is not marta station", http.StatusBadRequest)
 		return
 	}
 
 	allData := context.GetAll(r)
 	martaStationCord := allData["martaStationCord"]
 	if martaStationCord == nil{
-		http.Error(w, "BMB cannot find station in context", http.StatusBadRequest)
+		http.Error(w, "BM cannot find station in context", http.StatusBadRequest)
 		return		
 	}
 
@@ -526,6 +527,46 @@ func computeBikeMarta(w http.ResponseWriter, r *http.Request) {
 	q.Add("lng", lng2)
 	r.URL.RawQuery = q.Encode()
 	computeOriginMarta(w, r)
+	return
+}
+func computeMartaBike(w http.ResponseWriter, r *http.Request) {
+	lat1 := r.URL.Query().Get("lat1")
+	lng1 := r.URL.Query().Get("lng1")
+	lat2 := r.URL.Query().Get("lat2")
+	lng2 := r.URL.Query().Get("lng2")
+
+	flat1, errlat1 := strconv.ParseFloat(lat1, 64)
+	flng1, errlng1 := strconv.ParseFloat(lng1, 64)
+	flat2, errlat2 := strconv.ParseFloat(lat2, 64)
+	flng2, errlng2 := strconv.ParseFloat(lng2, 64)
+	if errlat1 != nil || errlng1 != nil || errlat2 != nil || errlng2 != nil{
+		http.Error(w, "MB parse error", http.StatusBadRequest)
+		return
+	}
+
+	origin := []float64{flat1, flng1}
+	dest := []float64{flat2, flng2}
+
+	if !isBikeStation(dest, r) || !isMartaStation(origin, r){
+		http.Error(w, "MB origin is not bike station or dest is not marta station", http.StatusBadRequest)
+		return
+	}
+
+	allData := context.GetAll(r)
+	bikeStationCord := allData["bikeStationCord"]
+	if bikeStationCord == nil{
+		http.Error(w, "MB cannot find station in context", http.StatusBadRequest)
+		return		
+	}
+
+	context.Set(r, "stationCord", bikeStationCord)
+
+	// Reconstruct url to reuse computerOriginMarta
+	q := r.URL.Query()
+	q.Add("lat", lat2)
+	q.Add("lng", lng2)
+	r.URL.RawQuery = q.Encode()
+	computeOriginBike(w, r)
 	return
 }
 
