@@ -48,6 +48,7 @@ cd hostfrontend
 **Sample Get**
 http://18.188.214.33:8080/dist/origin/bike?k=5&lat=33.76147456195493&lng=-84.36572268184585
 http://localhost:8080/dist/walk/bike/walk?k=5&lat1=33.76147456195493&lng1=-84.36572268184585&lat2=33.76147456195493&lng2=33.76147456195493
+http://localhost:8080/dist/bike/marta?k=5&lat1=33.76147456195493&lng1=-84.36572268184585&lat2=33.757410764920266&lng2=-84.35275687836776
 - Also return coordinates to integrate segments
   - For example, origin - bike {{ostation1: [lat1, lng1, dist1]}, {ostation2: [lat2, lng2, dist2]}}
                bike - marta {{bstation1: [lat1, lng1, dist1]}, {bstation2: [lat2, lng2, dist2]}}
