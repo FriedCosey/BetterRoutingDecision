@@ -40,6 +40,33 @@ cd hostfrontend
   - I created another server to host frontend static files because I want to test cross-origin
   - This is not needed actually, and can be merged with backend server
 
+### Random Idea
+- goal is to min walking distance! Ride more bicycle / Take Marta!
+- Assumption: we do not want bicycle to be stopped everywhere, need to ride to other station / marta
+
+- First
+  - if start icon added / changed
+    - get closest start -> bike station [walking]
+  - if end icon added / changed
+    - get closest start -> bike station [walking]
+    
+- Second
+  - if start icon added / changed
+    - get closest start -> marta station [walking]
+  - if end icon added / changed
+    - get closest start -> marta station [walking]
+
+- Third [complicated]
+  - if start icon added / changed
+    - get closest start -> bike station [walking]
+    - get closest bike -> marta station
+  - if end icon added / changed
+    - get closest marta -> bike [walking]
+    - get closest
+
+
+
+
 ### API
 
 **Sample JSON**
