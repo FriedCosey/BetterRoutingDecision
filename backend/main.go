@@ -489,83 +489,68 @@ func isMartaStation(coord []float64, r *http.Request) bool {
 	return false
 }
 
+// Compute the k - nearest marta station from bike station
 func computeBikeMarta(w http.ResponseWriter, r *http.Request) {
-	lat1 := r.URL.Query().Get("lat1")
-	lng1 := r.URL.Query().Get("lng1")
-	lat2 := r.URL.Query().Get("lat2")
-	lng2 := r.URL.Query().Get("lng2")
+	lat := r.URL.Query().Get("lat")
+	lng := r.URL.Query().Get("lng")
 
-	flat1, errlat1 := strconv.ParseFloat(lat1, 64)
-	flng1, errlng1 := strconv.ParseFloat(lng1, 64)
-	flat2, errlat2 := strconv.ParseFloat(lat2, 64)
-	flng2, errlng2 := strconv.ParseFloat(lng2, 64)
-	if errlat1 != nil || errlng1 != nil || errlat2 != nil || errlng2 != nil{
+	flat, errlat := strconv.ParseFloat(lat, 64)
+	flng, errlng := strconv.ParseFloat(lng, 64)
+	if errlat != nil || errlng != nil {
 		http.Error(w, "BM parse error", http.StatusBadRequest)
 		return
 	}
 
-	origin := []float64{flat1, flng1}
-	dest := []float64{flat2, flng2}
+	origin := []float64{flat, flng}
 
-	if !isBikeStation(origin, r) || !isMartaStation(dest, r){
-		http.Error(w, "BM origin is not bike station or dest is not marta station", http.StatusBadRequest)
+	if !isBikeStation(origin, r) {
+		http.Error(w, "BM origin is not bike station ", http.StatusBadRequest)
 		return
 	}
 
-	allData := context.GetAll(r)
-	martaStationCord := allData["martaStationCord"]
-	if martaStationCord == nil{
-		http.Error(w, "BM cannot find station in context", http.StatusBadRequest)
-		return		
+	// Get Marta station data
+	content, err := getDataFromApi("https://opendata.arcgis.com/datasets/7b752dcfca54486c8290b399340a407c_17.geojson")
+	if err != nil {
+		http.Error(w, "BM cannot get marta station data", http.StatusBadRequest)
+		return
 	}
+	stationCord := buildMartaMap(content)
+	context.Set(r, "stationCord", stationCord)
 
-	context.Set(r, "stationCord", martaStationCord)
-
-	// Reconstruct url to reuse computerOriginMarta
-	q := r.URL.Query()
-	q.Add("lat", lat2)
-	q.Add("lng", lng2)
-	r.URL.RawQuery = q.Encode()
+	// No need to reconstruct url to reuse computerOriginMarta
 	computeOriginMarta(w, r)
 	return
 }
-func computeMartaBike(w http.ResponseWriter, r *http.Request) {
-	lat1 := r.URL.Query().Get("lat1")
-	lng1 := r.URL.Query().Get("lng1")
-	lat2 := r.URL.Query().Get("lat2")
-	lng2 := r.URL.Query().Get("lng2")
 
-	flat1, errlat1 := strconv.ParseFloat(lat1, 64)
-	flng1, errlng1 := strconv.ParseFloat(lng1, 64)
-	flat2, errlat2 := strconv.ParseFloat(lat2, 64)
-	flng2, errlng2 := strconv.ParseFloat(lng2, 64)
-	if errlat1 != nil || errlng1 != nil || errlat2 != nil || errlng2 != nil{
+func computeMartaBike(w http.ResponseWriter, r *http.Request) {
+	lat := r.URL.Query().Get("lat")
+	lng := r.URL.Query().Get("lng")
+
+	flat, errlat := strconv.ParseFloat(lat, 64)
+	flng, errlng := strconv.ParseFloat(lng, 64)
+	if errlat != nil || errlng != nil {
 		http.Error(w, "MB parse error", http.StatusBadRequest)
 		return
 	}
 
-	origin := []float64{flat1, flng1}
-	dest := []float64{flat2, flng2}
+	origin := []float64{flat, flng}
 
-	if !isBikeStation(dest, r) || !isMartaStation(origin, r){
-		http.Error(w, "MB origin is not bike station or dest is not marta station", http.StatusBadRequest)
+	if !isMartaStation(origin, r){
+		http.Error(w, "MB origin is not marta station", http.StatusBadRequest)
 		return
 	}
 
-	allData := context.GetAll(r)
-	bikeStationCord := allData["bikeStationCord"]
-	if bikeStationCord == nil{
-		http.Error(w, "MB cannot find station in context", http.StatusBadRequest)
-		return		
+	content, err := getDataFromApi("https://opendata.arcgis.com/datasets/f5b90fe709aa466084dfe2674118e426_27.geojson")
+	if err != nil {
+		http.Error(w, "MB cannot get marta station data", http.StatusBadRequest)
+		return
 	}
+	stationCord := buildBikeMap(content)
 
-	context.Set(r, "stationCord", bikeStationCord)
 
-	// Reconstruct url to reuse computerOriginMarta
-	q := r.URL.Query()
-	q.Add("lat", lat2)
-	q.Add("lng", lng2)
-	r.URL.RawQuery = q.Encode()
+	context.Set(r, "stationCord", stationCord)
+
+	// No need to reconstruct url to reuse computerOriginMarta
 	computeOriginBike(w, r)
 	return
 }
