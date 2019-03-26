@@ -1168,7 +1168,7 @@ $(function(){
             closeBike.length = 0;
         }
 
-        $.get("http://localhost:8080/dist/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/dist/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(bikeMartaLine.length > 0){
