@@ -19,7 +19,7 @@ html, body, #Location-map {
 }
 
 
-.button_s {    
+.button_s {
     position: relative;
     border: none;
     color: white;
@@ -37,7 +37,7 @@ html, body, #Location-map {
 #button_s1 {
     background-color: #4CAF50; /* Green */
     border-radius: 20px;
-    opacity: 0.5;    
+    opacity: 0.5;
 }
 
 #button_s1:hover{
@@ -47,7 +47,7 @@ html, body, #Location-map {
 #button_s2 {
     background-color: #4CAF50; /*#9955FF; /* purple */
     border-radius: 20px;
-    opacity: 0.5;   
+    opacity: 0.5;
 }
 
 #button_s2:hover{
@@ -57,7 +57,7 @@ html, body, #Location-map {
 #button_s3 {
     background-color: #4CAF50; /*#33CCFF; /* blue */
     border-radius: 20px;
-    opacity: 0.5;   
+    opacity: 0.5;
 }
 
 #button_s3:hover {
@@ -75,7 +75,7 @@ html, body, #Location-map {
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   background: #5555FF;
-  border: 0;  
+  border: 0;
   cursor: pointer;
   -webkit-box-shadow: inset 0 -2px #5555FF;
   box-shadow: inset 0 -2px #5555FF;
@@ -108,7 +108,7 @@ html, body, #Location-map {
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   background: #9900FF;
-  border: 0;  
+  border: 0;
   cursor: pointer;
   -webkit-box-shadow: inset 0 -2px #9900FF;
   box-shadow: inset 0 -2px #9900FF;
@@ -120,8 +120,8 @@ html, body, #Location-map {
   box-shadow: none;
 }
 
-    
-    
+
+
 *{
     margin: 0;
     padding: 0;
@@ -142,7 +142,7 @@ h2 {
     font-family: 'Sanchez', serif;
 }
 
-input 
+input
 {
     font-size:130%;
     width: 60%;
@@ -172,12 +172,12 @@ form, table {
     outline: none;
     border-color: black;
     box-shadow: inset 1 1px 10px rgba(0,0,0,.075), 0 0 5px rgba(0, 0, 0, 0.5);
-}  
+}
 
 #submit:focus {
     outline: none;
     border-color: black;
-}  
+}
 
 .button.clicked{
     border-radius: 1px;
@@ -205,8 +205,8 @@ form, table {
     text-align: center;
 }
 
-.button_sm {  
-    position: relative;  
+.button_sm {
+    position: relative;
     border: none;
     color: white;
     text-align: center;
@@ -226,8 +226,8 @@ form, table {
     outline: none;
     border-color: black;
     box-shadow: inset 1 1px 10px rgba(0,0,0,.075), 0 0 5px rgba(0, 0, 0, 0.5);
-}  
-.button 
+}
+.button
 {
     display: none;
     color: white;
@@ -238,7 +238,7 @@ form, table {
     position:absolute;
     border-radius: 20px;
     /*left:30%;*/
-    
+
 }
 #button_sm1:hover{
     background-color: #227700; /* Green */
@@ -250,7 +250,7 @@ form, table {
 
 #button_sm2 {
     background-color: #4CAF50;/*#9955FF; /* purple */
-    border-radius: 20px;    
+    border-radius: 20px;
 }
 #button_sm2:hover{
     background-color: #227700;/*#7700FF; /* purple */
@@ -258,7 +258,7 @@ form, table {
 
 #button_sm4 {
     background-color: #4CAF50;/*#9955FF; /* purple */
-    border-radius: 20px;    
+    border-radius: 20px;
 }
 #button_sm4:hover{
     background-color: #227700;/*#7700FF; /* purple */
@@ -266,7 +266,7 @@ form, table {
 
 #button_sm5 {
     background-color: #4CAF50;/*#9955FF; /* purple */
-    border-radius: 20px;    
+    border-radius: 20px;
 }
 #button_sm5:hover{
     background-color: #227700;/*#7700FF; /* purple */
@@ -282,7 +282,7 @@ form, table {
     background-color: #4CAF50;/*#33CCFF; /* blue */
     border-radius: 20px;
 
-    
+
 }
 #button_sm3:hover{
     background-color: #227700;/*#009FCC; /* blue */
@@ -463,5 +463,51 @@ ul {
 }
 
 #openbar:hover{
+    opacity: 1;
+}
+
+#orangeline {
+    top: 1%;
+    right: 9%;
+    height: 5%;
+    border-radius: 10%;
+    width: 3%;
+    text-align: center;
+    background-color: #f77b0e;
+    position: fixed;
+    font-size: 20px;
+    margin: 3px;
+}
+
+#blueline {
+    margin: 3px;
+    top: 1%;
+    right: 3%;
+    height: 5%;
+    width: 3%;
+    text-align: center;
+    border-radius: 10%;
+    background-color: #4286f4;
+    position: fixed;
+    font-size: 20px;
+}
+
+#greenline {
+    margin: 3px;
+    top: 1%;
+    right: 6%;
+    height: 5%;
+    width: 3%;
+    border-radius: 10%;
+    text-align: center;
+    background-color: #006400;
+    position: fixed;
+    font-size: 20px;
+}
+.line{
+    opacity: 0.6;
+}
+
+.line:hover{
     opacity: 1;
 }
