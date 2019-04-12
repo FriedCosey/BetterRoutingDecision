@@ -969,7 +969,7 @@ $(function(){
     var barDomBikeMarta = $('#rightbar span:nth-child(3)');
 
     function getClosetBikeStation(marker, start){
-        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -980,7 +980,7 @@ $(function(){
     }
 
     function getClosetBikeMarta(marker, bike, start){
-        $.get("http://localhost:8080/dist/bike/marta?k=2&lat=" + bike[0] + "&lng=" + bike[1], function(data){
+        $.get("http://3.18.223.207:8080/dist/bike/marta?k=2&lat=" + bike[0] + "&lng=" + bike[1], function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -1119,7 +1119,7 @@ $(function(){
         }
         var rank = $(".ranking").text();
 
-        $.get("http://localhost:8080/" + rank + "/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/" + rank + "/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log($(".ranking").text());
             console.log(data[0].Coords);
             polyCoordinates = [];
@@ -1177,7 +1177,7 @@ $(function(){
 
         var rank = $(".ranking").text();
 
-        $.get("http://localhost:8080/" + rank + "/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/" + rank + "/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(bikeMartaLine.length > 0){
@@ -1239,7 +1239,7 @@ $(function(){
     }
 
     function getClosetMartaStation(marker, start){
-        $.get("http://localhost:8080/dist/origin/marta?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/dist/origin/marta?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -1333,7 +1333,7 @@ $(function(){
         }
         var rank = $(".ranking").text();
 
-        $.get("http://localhost:8080/" + rank + "/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        $.get("http://3.18.223.207:8080/" + rank + "/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(martaLine.length > 0){
