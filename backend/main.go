@@ -18,12 +18,16 @@ func main() {
 	handleReq()
 }
 
+// Bicycle 0.04 cal / meter 200lb 10 mph
+// Walk 0.07 cal / meter 200lb 4 mph
+
 func handleReq() {
 	r := mux.NewRouter()
 	// r.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/")))
 	r.HandleFunc("/bike", getBikeStations(sendBikeStations)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/bike", getBikeStations(computeOriginBike)).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/walk/bike/walk", computeWalkBikeWalk).Methods("GET", "OPTIONS")
+	r.HandleFunc("/cal/walk/bike/walk", computeWalkBikeWalkCal).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/walk/bike/marta", computeWalkBikeMarta).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/walk/marta/walk", computeWalkMartaWalk).Methods("GET", "OPTIONS")
 	r.HandleFunc("/dist/origin/marta", getMartaStations(computeOriginMarta)).Methods("GET", "OPTIONS")
@@ -428,6 +432,100 @@ func computeWalkMartaWalk(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(pathPairs)
+}
+func computeWalkBikeWalkCal(w http.ResponseWriter, r *http.Request) {
+	/* I tried to use API but I failed parsing it, repeating the code directly 
+	Todo: Use API
+	k := r.URL.Query().Get("k")
+	lat1 := r.URL.Query().Get("lat1")
+	lng1 := r.URL.Query().Get("lng1")
+	lat2 := r.URL.Query().Get("lat2")
+	lng2 := r.URL.Query().Get("lng2")
+	content, err := getDataFromApi("http://localhost:8080/dist/walk/bike/walk?k=" + k + "&lat1=" + lat1 + "&lng1=" + lng1 + "&lat2=" + lat2 + "&lng2=" + lng2)
+	*/
+
+	k := r.URL.Query().Get("k")
+	lat1 := r.URL.Query().Get("lat1")
+	lng1 := r.URL.Query().Get("lng1")
+	lat2 := r.URL.Query().Get("lat2")
+	lng2 := r.URL.Query().Get("lng2")
+
+	content1, err := getDataFromApi("http://localhost:8080/dist/origin/bike?k=" + k + "&lat=" + lat1 + "&lng=" + lng1)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	resJson1 := []interface{}{}
+	json.Unmarshal(content1, &resJson1)
+	originCoord := buildCandi(resJson1)
+	// fmt.Println(originCoord)
+
+	content2, err := getDataFromApi("http://localhost:8080/dist/origin/bike?k=" + k + "&lat=" + lat2 + "&lng=" + lng2)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	resJson2 := []interface{}{}
+	json.Unmarshal(content2, &resJson2)
+	destCoord := buildCandi(resJson2)
+	// fmt.Println(destCoord)
+
+	flat1, err := strconv.ParseFloat(lat1, 64)
+	if err != nil {
+		http.Error(w, "lat parse error", http.StatusBadRequest)
+		return
+	}
+	flng1, err := strconv.ParseFloat(lng1, 64)
+	if err != nil {
+		http.Error(w, "lng parse error", http.StatusBadRequest)
+		return
+	}
+	flat2, err := strconv.ParseFloat(lat2, 64)
+	if err != nil {
+		http.Error(w, "lat parse error", http.StatusBadRequest)
+		return
+	}
+	flng2, err := strconv.ParseFloat(lng2, 64)
+	if err != nil {
+		http.Error(w, "lng parse error", http.StatusBadRequest)
+		return
+	}
+	origin := []float64{flat1, flng1}
+	dest := []float64{flat2, flng2}
+
+	type totalPath struct {
+		Stations  []string
+		Coords    [][]float64
+		TotalCal float64
+	}
+
+	pathPairs := []totalPath{}
+	for orgStat, orgCoord := range originCoord {
+		for destStat, destCoord := range destCoord {
+			totalCal := 0.
+			totalCal = totalCal + calcDist(origin, orgCoord) * 0.07
+			totalCal = totalCal + calcDist(destCoord, orgCoord) * 0.04
+			totalCal = totalCal + calcDist(destCoord, dest) * 0.07
+			tmpStat := []string{}
+			tmpStat = append(tmpStat, orgStat)
+			tmpStat = append(tmpStat, destStat)
+			tmpCoord := [][]float64{}
+			tmpCoord = append(tmpCoord, origin)
+			tmpCoord = append(tmpCoord, orgCoord)
+			tmpCoord = append(tmpCoord, destCoord)
+			tmpCoord = append(tmpCoord, dest)
+			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal})
+		}
+	}
+	sort.Slice(pathPairs, func(i, j int) bool {
+		return pathPairs[i].TotalCal > pathPairs[j].TotalCal
+	})
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(pathPairs)
+
 }
 func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 
