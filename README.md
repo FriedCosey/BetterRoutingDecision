@@ -90,3 +90,6 @@ http://localhost:8080/dist/bike/marta?k=5&lat1=33.76147456195493&lng1=-84.365722
 | get | /dist/walk/bike/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{Gordon-White Park 4394.230297492726 [33.73907466035702 -84.43218996727106]} {West End Park 5112.9700662789355 [33.740805432873486 -84.4244820521268]}]|
 | get | /dist/walk/marta/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{Gordon-White Park 4394.230297492726 [33.73907466035702 -84.43218996727106]} {West End Park 5112.9700662789355 [33.740805432873486 -84.4244820521268]}]|
 
+
+#### Report
+[Report](https://docs.google.com/document/d/1vqb5k690TgPRoCuuJUv1PvRujqVBoBSV-KR2-z6-23o/edit?usp=drive_web&ouid=117784432773895591243)
