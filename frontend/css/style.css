@@ -468,10 +468,10 @@ ul {
 
 #orangeline {
     top: 1%;
-    right: 9%;
-    height: 5%;
+    right: 13%;
+    height: 3%;
     border-radius: 10%;
-    width: 3%;
+    width: 5%;
     text-align: center;
     background-color: #f77b0e;
     position: fixed;
@@ -483,8 +483,8 @@ ul {
     margin: 3px;
     top: 1%;
     right: 3%;
-    height: 5%;
-    width: 3%;
+    height: 3%;
+    width: 5%;
     text-align: center;
     border-radius: 10%;
     background-color: #4286f4;
@@ -495,19 +495,90 @@ ul {
 #greenline {
     margin: 3px;
     top: 1%;
-    right: 6%;
-    height: 5%;
-    width: 3%;
+    right: 8%;
+    height: 3%;
+    width: 5%;
     border-radius: 10%;
     text-align: center;
     background-color: #006400;
     position: fixed;
     font-size: 20px;
 }
+div .toggleText{
+    display: inline-block;
+    text-decoration: none;
+}
+
 .line{
+    vertical-align: middle;
     opacity: 0.6;
 }
 
 .line:hover{
     opacity: 1;
+}
+
+.ranking{
+    text-align: center;
+    box-shadow: 3px 4px black;
+    background-color: #006400;
+    opacity: 0.5;
+    position: fixed;
+    right: 5%;
+    bottom: 3%;
+    text-decoration: none;
+    width: 5%;
+    height: 5%;
+    font-size: 30px;
+    border-radius: 10%;
+    border: 5px solid #006400;
+}
+
+.ranking:hover{
+    opacity: 1;
+}
+
+*{
+    font-family: 'Nunito', sans-serif;
+
+}
+
+
+#orangeInfo {
+    top: 1%;
+    left: 18%;
+    height: 3%;
+    border-radius: 10%;
+    width: 5%;
+    text-align: center;
+    background-color: #f77b0e;
+    position: fixed;
+    font-size: 20px;
+    margin: 3px;
+}
+
+#blueInfo {
+    margin: 3px;
+    top: 1%;
+    left: 3%;
+    height: 3%;
+    width: 5%;
+    text-align: center;
+    border-radius: 10%;
+    background-color: #4286f4;
+    position: fixed;
+    font-size: 20px;
+}
+
+#greenInfo {
+    margin: 3px;
+    top: 1%;
+    left: 8%;
+    height: 3%;
+    width: 10%;
+    border-radius: 10%;
+    text-align: center;
+    background-color: #006400;
+    position: fixed;
+    font-size: 20px;
 }
