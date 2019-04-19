@@ -426,7 +426,7 @@ ul {
 #rightbar {
     width: 12%;
     height: 80%;
-    opacity: 0.5;
+    opacity: 0.9;
     background-color: #227700;
     border-radius: 5%;
     position: absolute;
@@ -436,7 +436,7 @@ ul {
 #rightbar {
     width: 20%;
     height: 80%;
-    opacity: 0.5;
+    opacity: 0.8;
     background-color: #227700;
     position: absolute;
     right: 0%;

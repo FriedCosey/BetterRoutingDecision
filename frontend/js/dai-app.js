@@ -969,7 +969,7 @@ $(function(){
     var barDomBikeMarta = $('#rightbar span:nth-child(3)');
 
     function getClosetBikeStation(marker, start){
-        $.get("http://3.18.223.207:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+        $.get("http://localhost:8080/dist/origin/bike?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -980,7 +980,7 @@ $(function(){
     }
 
     function getClosetBikeMarta(marker, bike, start){
-        $.get("http://3.18.223.207:8080/dist/bike/marta?k=2&lat=" + bike[0] + "&lng=" + bike[1], function(data){
+        $.get("http://localhost:8080/dist/bike/marta?k=2&lat=" + bike[0] + "&lng=" + bike[1], function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -1118,8 +1118,9 @@ $(function(){
             }
         }
         var rank = $(".ranking").text();
-
-        $.get("http://3.18.223.207:8080/" + rank + "/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        if(rank == "time")
+            rank = "dist";
+        $.get("http://localhost:8080/" + rank + "/walk/bike/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log($(".ranking").text());
             console.log(data[0].Coords);
             polyCoordinates = [];
@@ -1157,9 +1158,10 @@ $(function(){
             markersLine.setMap(map);
             bikeLine.push(markersLine);
             if(rank == "dist")
-                barDomBike.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + ". The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
+                barDomBike.text("Walk to " + data[0].Stations[0] + ", ride bicycle to " + data[0].Stations[1] + ", and walk to destination." + " The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters. It will take " + (data[0].TotalTime / 60).toPrecision(2) + " minutes.");
             else
-                barDomBike.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + ". The total calories of walking and biking is " + data[0].TotalCal.toPrecision(2) + " cal.");
+                barDomBike.text("Walk to " + data[0].Stations[0] + ", ride bicycle to " + data[0].Stations[1] + ", and walk to destination." + " The total calories of walking and biking is " + data[0].TotalCal.toPrecision(2) + " cal. It will take " + (data[0].TotalTime / 60).toPrecision(2)  + " minutes.");
+
 
         });
     }
@@ -1176,8 +1178,9 @@ $(function(){
         }
 
         var rank = $(".ranking").text();
-
-        $.get("http://3.18.223.207:8080/" + rank + "/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        if(rank == "time")
+            rank = "dist";
+        $.get("http://localhost:8080/" + rank + "/walk/bike/marta?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(bikeMartaLine.length > 0){
@@ -1231,15 +1234,15 @@ $(function(){
             bikeMartaLine.push(markersLine);
             // barDomBike.text("Walk to " + data[0].Stations[0] + " and ride Bicycle to " + data[0].Stations[1] + ". The total distance of walking and biking is " + data[0].TotalDist.toPrecision(2) + " meters.");
             if(rank == "dist")
-                barDomBikeMarta.text("Walk to " + data[0].Stations[0] + ", ride Bicycle to " + data[0].Stations[1] + ", take Marta to " + data[0].Stations[2] + ", ride Bicycle to " + data[0].Stations[3] + ". The total distance of walking, biking and taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters.");
+                barDomBikeMarta.text("Walk to " + data[0].Stations[0] + ", ride bicycle to " + data[0].Stations[1] + ", take Marta to " + data[0].Stations[2] + ", ride Bicycle to " + data[0].Stations[3] + ", and walk to destination. The total distance of walking, biking and taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters. " + "It will take " + (data[0].TotalTime / 60).toPrecision(2) + " minutes.");
             else
-                barDomBikeMarta.text("Walk to " + data[0].Stations[0] + ", ride Bicycle to " + data[0].Stations[1] + ", take Marta to " + data[0].Stations[2] + ", ride Bicycle to " + data[0].Stations[3] + ". The total distance of walking, biking and taking Marta is " + data[0].TotalCal.toPrecision(2) + " cal.");
+                barDomBikeMarta.text("Walk to " + data[0].Stations[0] + ", ride bicycle to " + data[0].Stations[1] + ", take Marta to " + data[0].Stations[2] + ", ride Bicycle to " + data[0].Stations[3] + ", and walk to destination. The total distance of walking, biking and taking Marta is " + data[0].TotalCal.toPrecision(2) + " cal. " + "It will take " + (data[0].TotalTime / 60).toPrecision(2) + " minutes.");
 
         });
     }
 
     function getClosetMartaStation(marker, start){
-        $.get("http://3.18.223.207:8080/dist/origin/marta?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
+        $.get("http://localhost:8080/dist/origin/marta?k=2&lat=" + marker.getPosition().lat() + "&lng=" + marker.getPosition().lng(), function(data){
             // console.log(data);
             for(let i = 0; i < data.length; i++){
                 // console.log(data[i].Coord);
@@ -1332,8 +1335,9 @@ $(function(){
             }
         }
         var rank = $(".ranking").text();
-
-        $.get("http://3.18.223.207:8080/" + rank + "/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
+        if(rank == "time")
+            rank = "dist";
+        $.get("http://localhost:8080/" + rank + "/walk/marta/walk?k=2&lat1=" + startMarker[0].getPosition().lat() + "&lng1=" + startMarker[0].getPosition().lng() + "&lat2=" + endMarker[0].getPosition().lat() + "&lng2=" + endMarker[0].getPosition().lng(), function(data){
             console.log(data[0].Coords);
             polyCoordinates = [];
             if(martaLine.length > 0){
@@ -1370,9 +1374,9 @@ $(function(){
             markersLine.setMap(map);
             martaLine.push(markersLine);
             if(rank == "dist")
-                barDomMarta.text("Walk to " + data[0].Stations[0] + " and take Marta to " + data[0].Stations[1] + ". The total distance of walking and taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters.");
+                barDomMarta.text("Walk to " + data[0].Stations[0] + ", take Marta to " + data[0].Stations[1] + ", and walk to destination. The total distance of walking and taking Marta is " + data[0].TotalDist.toPrecision(2) + " meters. It will take " + (data[0].TotalTime / 60).toPrecision(2) + " minutes.");
             else
-                barDomMarta.text("Walk to " + data[0].Stations[0] + " and take Marta to " + data[0].Stations[1] + ". The total distance of walking and taking Marta is " + data[0].TotalCal.toPrecision(2) + " cal.");
+                barDomMarta.text("Walk to " + data[0].Stations[0] + ", take Marta to " + data[0].Stations[1] + ", and walk to destination. The total distance of walking and taking Marta is " + data[0].TotalCal.toPrecision(2) + " cal. It will take " + (data[0].TotalTime / 60).toPrecision(2) + " minutes.");
 
         });
     }
@@ -1497,7 +1501,7 @@ $(function(){
 
         } else {
             dist = true;
-            $('.ranking').text("dist");
+            $('.ranking').text("time");
             connectBike();
             connectMarta();
             connectBikeMarta();

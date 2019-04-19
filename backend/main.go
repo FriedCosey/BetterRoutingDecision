@@ -18,8 +18,9 @@ func main() {
 	handleReq()
 }
 
-// Bicycle 0.04 cal / meter 200lb 10 mph
-// Walk 0.07 cal / meter 200lb 4 mph
+// Bicycle 0.04 cal / meter 200lb 10 mph 4.47 meter / second
+// Walk 0.07 cal / meter 200lb 4 mph 1.79 meter / second
+// Marta 70 mph 31.2928 meter / second 
 
 func handleReq() {
 	r := mux.NewRouter()
@@ -315,6 +316,7 @@ func computeWalkBikeMartaCal(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalCal float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -325,9 +327,17 @@ func computeWalkBikeMartaCal(w http.ResponseWriter, r *http.Request) {
 					totalCal := 0.
 					totalCal += calcDist(origin, orgCoord) * 0.07
 					totalCal += calcDist(orgCoord, orgInterCoord) * 0.04
-					totalCal += calcDist(orgInterCoord, destInterCoord)
 					totalCal += calcDist(destCoord, destInterCoord) * 0.04
 					totalCal += calcDist(destCoord, dest) * 0.07
+
+					totalTime := 0.
+					totalTime += calcDist(origin, orgCoord) / 1.79 
+					totalTime += calcDist(orgCoord, orgInterCoord) / 4.47
+					totalTime += calcDist(orgInterCoord, destInterCoord) / 31.29 
+					totalTime += calcDist(destCoord, destInterCoord) / 4.47 
+					totalTime += calcDist(destCoord, dest) / 1.79
+					
+
 					tmpStat := []string{}
 					tmpStat = append(tmpStat, orgStat)
 					tmpStat = append(tmpStat, orgInterStat)
@@ -340,7 +350,7 @@ func computeWalkBikeMartaCal(w http.ResponseWriter, r *http.Request) {
 					tmpCoord = append(tmpCoord, destInterCoord)
 					tmpCoord = append(tmpCoord, destCoord)
 					tmpCoord = append(tmpCoord, dest)
-					pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal})
+					pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal, totalTime})
 				}
 			}
 		}
@@ -440,6 +450,7 @@ func computeWalkBikeMarta(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalDist float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -453,6 +464,14 @@ func computeWalkBikeMarta(w http.ResponseWriter, r *http.Request) {
 					totalDist += calcDist(orgInterCoord, destInterCoord)
 					totalDist += calcDist(destCoord, destInterCoord)
 					totalDist += calcDist(destCoord, dest)
+
+					totalTime := 0.
+					totalTime += calcDist(origin, orgCoord) / 1.79 
+					totalTime += calcDist(orgCoord, orgInterCoord) / 4.47
+					totalTime += calcDist(orgInterCoord, destInterCoord) / 31.29 
+					totalTime += calcDist(destCoord, destInterCoord) / 4.47 
+					totalTime += calcDist(destCoord, dest) / 1.79
+
 					tmpStat := []string{}
 					tmpStat = append(tmpStat, orgStat)
 					tmpStat = append(tmpStat, orgInterStat)
@@ -465,7 +484,7 @@ func computeWalkBikeMarta(w http.ResponseWriter, r *http.Request) {
 					tmpCoord = append(tmpCoord, destInterCoord)
 					tmpCoord = append(tmpCoord, destCoord)
 					tmpCoord = append(tmpCoord, dest)
-					pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist})
+					pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist, totalTime})
 				}
 			}
 		}
@@ -532,6 +551,7 @@ func computeWalkMartaWalkCal(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalCal float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -540,6 +560,10 @@ func computeWalkMartaWalkCal(w http.ResponseWriter, r *http.Request) {
 			totalCal := 0.
 			totalCal += calcDist(origin, orgCoord) * 0.07
 			totalCal += calcDist(destCoord, dest) * 0.07
+			totalTime := 0.
+			totalTime += calcDist(origin, orgCoord) / 1.79
+			totalTime += calcDist(orgCoord, destCoord) / 31.29 
+			totalTime += calcDist(destCoord, dest) / 1.79
 			tmpStat := []string{}
 			tmpStat = append(tmpStat, orgStat)
 			tmpStat = append(tmpStat, destStat)
@@ -548,7 +572,7 @@ func computeWalkMartaWalkCal(w http.ResponseWriter, r *http.Request) {
 			tmpCoord = append(tmpCoord, orgCoord)
 			tmpCoord = append(tmpCoord, destCoord)
 			tmpCoord = append(tmpCoord, dest)
-			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal})
+			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal, totalTime})
 		}
 	}
 	sort.Slice(pathPairs, func(i, j int) bool {
@@ -613,6 +637,7 @@ func computeWalkMartaWalk(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalDist float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -622,6 +647,10 @@ func computeWalkMartaWalk(w http.ResponseWriter, r *http.Request) {
 			totalDist += calcDist(origin, orgCoord)
 			totalDist += calcDist(destCoord, orgCoord)
 			totalDist += calcDist(destCoord, dest)
+			totalTime := 0.
+			totalTime += calcDist(origin, orgCoord) / 1.79
+			totalTime += calcDist(orgCoord, destCoord) / 31.29 
+			totalTime += calcDist(destCoord, dest) / 1.79
 			tmpStat := []string{}
 			tmpStat = append(tmpStat, orgStat)
 			tmpStat = append(tmpStat, destStat)
@@ -630,7 +659,7 @@ func computeWalkMartaWalk(w http.ResponseWriter, r *http.Request) {
 			tmpCoord = append(tmpCoord, orgCoord)
 			tmpCoord = append(tmpCoord, destCoord)
 			tmpCoord = append(tmpCoord, dest)
-			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist})
+			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist, totalTime})
 		}
 	}
 	sort.Slice(pathPairs, func(i, j int) bool {
@@ -705,6 +734,7 @@ func computeWalkBikeWalkCal(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalCal float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -714,6 +744,12 @@ func computeWalkBikeWalkCal(w http.ResponseWriter, r *http.Request) {
 			totalCal = totalCal + calcDist(origin, orgCoord) * 0.07
 			totalCal = totalCal + calcDist(destCoord, orgCoord) * 0.04
 			totalCal = totalCal + calcDist(destCoord, dest) * 0.07
+
+			totalTime := 0.
+			totalTime += calcDist(origin, orgCoord) / 1.79
+			totalTime += calcDist(destCoord, orgCoord) / 4.47 
+			totalTime += calcDist(destCoord, dest) / 1.79 
+
 			tmpStat := []string{}
 			tmpStat = append(tmpStat, orgStat)
 			tmpStat = append(tmpStat, destStat)
@@ -722,7 +758,7 @@ func computeWalkBikeWalkCal(w http.ResponseWriter, r *http.Request) {
 			tmpCoord = append(tmpCoord, orgCoord)
 			tmpCoord = append(tmpCoord, destCoord)
 			tmpCoord = append(tmpCoord, dest)
-			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal})
+			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalCal, totalTime})
 		}
 	}
 	sort.Slice(pathPairs, func(i, j int) bool {
@@ -790,6 +826,7 @@ func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 		Stations  []string
 		Coords    [][]float64
 		TotalDist float64
+		TotalTime float64
 	}
 
 	pathPairs := []totalPath{}
@@ -799,6 +836,12 @@ func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 			totalDist += calcDist(origin, orgCoord)
 			totalDist += calcDist(destCoord, orgCoord)
 			totalDist += calcDist(destCoord, dest)
+
+			totalTime := 0.
+			totalTime += calcDist(origin, orgCoord) / 1.79
+			totalTime += calcDist(destCoord, orgCoord) / 4.47 
+			totalTime += calcDist(destCoord, dest) / 1.79 
+
 			tmpStat := []string{}
 			tmpStat = append(tmpStat, orgStat)
 			tmpStat = append(tmpStat, destStat)
@@ -807,7 +850,7 @@ func computeWalkBikeWalk(w http.ResponseWriter, r *http.Request) {
 			tmpCoord = append(tmpCoord, orgCoord)
 			tmpCoord = append(tmpCoord, destCoord)
 			tmpCoord = append(tmpCoord, dest)
-			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist})
+			pathPairs = append(pathPairs, totalPath{tmpStat, tmpCoord, totalDist, totalTime})
 		}
 	}
 	sort.Slice(pathPairs, func(i, j int) bool {
