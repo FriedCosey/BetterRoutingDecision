@@ -19,8 +19,19 @@ The server should be running on localhost:3000
 - frontend
   - our integrated google map
 
-- backend
+- **backend**
   - api implemented in main.go
+  - from each endpoint in handleReq() function, the corresponding function can be easily found
+  
+  /dist/origin/bike: Take User Input k, latitude and longitude. Compute the k closest bike station to the origin
+  /dist/origin/marta: Take User Input k, latitude and longitude. Compute the k closest marta station to the origin
+  /dist/bike/marta: Take User Input k, latitude of bike/marta station and longitude of bike/marta station. Compute the k closest marta station to the bike station.
+  /dist/marta/bike: Take User Input k, latitude of bike/marta station and longitude of bike/marta station. Compute the k closest bike station to the marta station.
+  /dist/walk/bike/marta: calls the above four endpoints for candidate set and enumerate all combinations
+  
+  
+  - api endpoint for marta: https://opendata.arcgis.com/datasets/7b752dcfca54486c8290b399340a407c_17.geojson
+  - api endpoint for bike: https://opendata.arcgis.com/datasets/f5b90fe709aa466084dfe2674118e426_27.geojson
   
 - hostfrontend
   - node server to host frontend code
