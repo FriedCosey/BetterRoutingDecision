@@ -37,7 +37,7 @@ The server should be running on localhost:3000
   - node server to host frontend code
 
 - test
-  - seperate readme inside the folder
+  - check bottom
 
 ### How to play with our map
 - Demo Video https://youtu.be/3KliR-3g0_8
@@ -69,13 +69,18 @@ http://localhost:8080/cal/walk/bike/walk?k=2&lat1=33.8031772871&lng1=-84.5064356
 | get | /cal/walk/bike/walk /cal/walk/bike/marta /cal/walk/marta/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalCal":960.7779208996385,"TotalTime":7667.820597762477}]|
 
 ### Test
-- We have 2 test files, one is _inputlist.txt_, which tests randomed distributed origin points and destinaion points around Atlanta city. The other is _intputlistMarta.txt_ which is another test file with randomed origin points and ends at randomed selected Marata stations. 
+- Generate random coordiantes by
+```
+python3 generateRandom.py [number of points]
+```
 
-- How to run the test, run the following command and you should be able to see the output.txt after a while. You should be able to see the 1st rank route result from test cases and the total runtime at the end.
+- We have 2 test files, one is _inputlist.txt_, which tests random generated origin points and destinaion points around Atlanta city. The other is _intputlistMarta.txt_ which is another test file with randomed origin points and ends at randomed selected Marta stations. 
+
+- How to run the test: run the following command and you should be able to see the output.txt after a while. You should be able to see the best route from each test cases and the total runtime at the end.
 
 - You may change the input test file through changing the 13 line of the testK.py. 
 ```
-python testK.py K_VALUE
+python3 testK.py K_VALUE
 ```
 
 
