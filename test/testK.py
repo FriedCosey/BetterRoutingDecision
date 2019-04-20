@@ -9,7 +9,7 @@ def getBikeMarta(k):
         os.remove(fileName)
         print("Removed {}".format(fileName))
 
-    with open('inputList.txt', mode='r') as input:
+    with open('inputListMarta.txt', mode='r') as input:
         start = time.clock()
 
         while True:
@@ -21,7 +21,7 @@ def getBikeMarta(k):
                 break
             coord1 = coord1.split()
             coord2 = coord2.split()
-            r = requests.get("http://3.18.223.207:8080/dist/walk/bike/walk?k=" + str(k) + "&lat1=" + coord1[0] + "&lng1=" + coord1[1] + "&lat2=" + coord2[0] + "&lng2=" + coord2[1])
+            r = requests.get("http://localhost:8080/dist/walk/bike/marta?k=" + str(k) + "&lat1=" + coord1[0] + "&lng1=" + coord1[1] + "&lat2=" + coord2[0] + "&lng2=" + coord2[1])
             with open('output' + k + '.txt', mode='a') as output:
                 output.write("{}\n".format(r.json()[0]))
 
