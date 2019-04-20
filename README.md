@@ -1,95 +1,59 @@
-### Known Bugs
-- 最近的兩個點 (k = 2) 不一定是最佳, 但是當 (k = 全部的點) -> brute force 會是最佳, 所以要越準確就是跟 k 值有關 (報告可以討論 (?))
-- 兩個點的直線距離會穿過建築物 (這個路線不存在) 需要繞過建築物, 但是如果考慮繞過建築物的路線, 就不能單純算兩點最短距離, 可能需要丟到 google map api 看繞過建築物時間/距離 -> 可以 argue 我們假設這路線存在或是只是 approximation (?)
-- Share common station, what to do? As in 3rd screenshot marta
-
-### Question
-- Google 的地鐵路線是到最近的站嗎 (?) 還是總時間最短的站
-
-
 ### Screenshot
 
-![image](https://user-images.githubusercontent.com/29709822/54088076-0d2c2980-4330-11e9-8aab-dc12401d154e.png)
-![image](https://user-images.githubusercontent.com/29709822/54091095-46759100-4352-11e9-8b2c-2251b5db1d3c.png)
-(The black line is the shortest distance total using bike)
-![image](https://user-images.githubusercontent.com/29709822/54097643-78edb100-4387-11e9-9661-d10209a76354.png)
-
+![image](https://user-images.githubusercontent.com/29709822/56450353-7cb01400-62f3-11e9-9d2d-db03967ae3dd.png)
 
 ### Installation
 ```
 cd backend
+  go get github.com/gorilla/context
+  go get github.com/gorilla/mux
   go run main.go
+The server should be running on localhost:8080
 cd hostfrontend
   node app.js
+The server should be running on localhost:3000
 ```
 
 ### Structure
 
 - frontend
-  - I do not understand the code in this folder, only god knows ...
-  - Just made sure everything work on my local firefox browser
+  - our integrated google map
 
 - backend
   - api implemented in main.go
-  - Any language is fine, flask, node, express ..... (Need to add cors header)
-  - maybe something like:
-    - https://github.com/FriedCosey/Swift-Webpage/blob/master/app.js
-    - https://github.com/FriedCosey/ca1/blob/master/routes/user/course/query.js
   
 - hostfrontend
-  - I created another server to host frontend static files because I want to test cross-origin
-  - This is not needed actually, and can be merged with backend server
+  - node server to host frontend code
 
-### Random Idea
-- goal is to min walking distance! Ride more bicycle / Take Marta!
-- Assumption: we do not want bicycle to be stopped everywhere, need to ride to other station / marta
+- test
+  - seperate readme inside the folder
 
-- First
-  - if start icon added / changed
-    - get closest start -> bike station [walking]
-  - if end icon added / changed
-    - get closest start -> bike station [walking]
-    
-- Second
-  - if start icon added / changed
-    - get closest start -> marta station [walking]
-  - if end icon added / changed
-    - get closest start -> marta station [walking]
+### How to play with our map
+- Demo Video https://youtu.be/3KliR-3g0_8
 
-- Third [complicated]
-  - if start icon added / changed
-    - get closest start -> bike station [walking]
-    - get closest bike -> marta station
-  - if end icon added / changed
-    - get closest marta -> bike [walking]
-    - get closest
+- Click add marker
+- Add start
+  - Click a location on our map
+- Add End
+  - Click a location on our map
 
-
+- Suggested route should be generated automatically
+- Change the location of start/end icon by clicking other location. Have fun!
 
 
 ### API
+- Sample Query
+http://localhost:8080/cal/walk/bike/walk?k=2&lat1=33.8031772871&lng1=-84.50643562260001&lat2=33.8237153622&lng2=-84.43450950559998
 
-**Sample JSON**
-[{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]
-
-**Sample Get**
-http://18.188.214.33:8080/dist/origin/bike?k=5&lat=33.76147456195493&lng=-84.36572268184585
-http://localhost:8080/dist/walk/bike/walk?k=5&lat1=33.76147456195493&lng1=-84.36572268184585&lat2=33.76147456195493&lng2=33.76147456195493
-http://localhost:8080/dist/bike/marta?k=5&lat1=33.76147456195493&lng1=-84.36572268184585&lat2=33.757410764920266&lng2=-84.35275687836776
-- Also return coordinates to integrate segments
-  - For example, origin - bike {{ostation1: [lat1, lng1, dist1]}, {ostation2: [lat2, lng2, dist2]}}
-               bike - marta {{bstation1: [lat1, lng1, dist1]}, {bstation2: [lat2, lng2, dist2]}}
-  - Although ostation1 + bstation1 is shorter, but because ostation2 + bstation2 on same direction -> better path
+- Return JSON
+[{"Stations":["Tech Parkway","Atlantic Station"],"Coords":[[33.8031772871,-84.50643562260001],[33.777526808601124,-84.40759279905951],[33.79327387831942,-84.39788820975087],[33.8237153622,-84.43450950559998]],"TotalCal":1084.770867971532,"TotalTime":8469.259736183943},{"Stations":["Tech Parkway","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.777526808601124,-84.40759279905951],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalCal":1041.0060754589008,"TotalTime":8213.113795418363},{"Stations":["14th \u0026 Howell Mill Rd","Atlantic Station"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.79327387831942,-84.39788820975087],[33.8237153622,-84.43450950559998]],"TotalCal":1025.3175921869733,"TotalTime":8040.157135702016},{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalCal":960.7779208996385,"TotalTime":7667.820597762477}]
 
 | Method | Path | Description |
 |------- | --------- | ------ |
-| get | /dist/origin/marta | parameter: k (stations), lat, lng return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
+| get | /dist/origin/marta | parameter: k (stations), lat, lng return [{"Name":"Inman Park-Reynoldstown","Dist":1282.4069476253053,"Coord":[33.757410764920266,-84.35275687836776]},{"Name":"King Memorial","Dist":1585.314178280163,"Coord":[33.7498080710845,-84.37554588614684]}]|
 | get | /dist/origin/bike | parameter: k (stations), lat, lng return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
-| get | /dist/marta/dest | parameter: k (stations), lat, lng return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
+| get | /dist/bike/marta | parameter: k (stations), lat, lng return [{"Name":"Inman Park-Reynoldstown","Dist":1282.4069476253053,"Coord":[33.757410764920266,-84.35275687836776]},{"Name":"King Memorial","Dist":1585.314178280163,"Coord":[33.7498080710845,-84.37554588614684]}]]|
 | get | /dist/marta/bike | parameter: k (stations), lat, lng return [{"Name":"Highland Ave - Freedom Trail Park","Dist":0,"Coord":[33.76147456195493,-84.36572268184585]},{"Name":"Eastside BeltLine \u0026 Irwin","Dist":432.05950572295995,"Coord":[33.75769038253729,-84.36468508386245]}]|
-| get | /dist/walk/bike/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{Gordon-White Park 4394.230297492726 [33.73907466035702 -84.43218996727106]} {West End Park 5112.9700662789355 [33.740805432873486 -84.4244820521268]}]|
-| get | /dist/walk/marta/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{Gordon-White Park 4394.230297492726 [33.73907466035702 -84.43218996727106]} {West End Park 5112.9700662789355 [33.740805432873486 -84.4244820521268]}]|
+| get | /dist/walk/bike/walk /dist/walk/marta/walk /dist/walk/bike/marta | parameter: k (stations), lat1, lng1, lat2, lng2 return [{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalDist":13725.398869994833,"TotalTime":7667.820597762477}]|
+| get | /cal/walk/bike/walk /cal/walk/bike/marta /cal/walk/marta/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalCal":960.7779208996385,"TotalTime":7667.820597762477}]|
 
-
-#### Report
-[Report](https://docs.google.com/document/d/1vqb5k690TgPRoCuuJUv1PvRujqVBoBSV-KR2-z6-23o/edit?usp=drive_web&ouid=117784432773895591243)
