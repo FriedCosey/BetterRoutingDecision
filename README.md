@@ -72,6 +72,8 @@ http://localhost:8080/cal/walk/bike/walk?k=2&lat1=33.8031772871&lng1=-84.5064356
 - We have 2 test files, one is _inputlist.txt_, which tests randomed distributed origin points and destinaion points around Atlanta city. The other is _intputlistMarta.txt_ which is another test file with randomed origin points and ends at randomed selected Marata stations. 
 
 - How to run the test, run the following command and you should be able to see the output.txt after a while. You should be able to see the 1st rank route result from test cases and the total runtime at the end.
+
+- You may change the input test file through changing the 13 line of the testK.py. 
 ```
 python testK.py K_VALUE
 ```
