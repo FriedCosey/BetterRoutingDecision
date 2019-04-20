@@ -57,3 +57,14 @@ http://localhost:8080/cal/walk/bike/walk?k=2&lat1=33.8031772871&lng1=-84.5064356
 | get | /dist/walk/bike/walk /dist/walk/marta/walk /dist/walk/bike/marta | parameter: k (stations), lat1, lng1, lat2, lng2 return [{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalDist":13725.398869994833,"TotalTime":7667.820597762477}]|
 | get | /cal/walk/bike/walk /cal/walk/bike/marta /cal/walk/marta/walk | parameter: k (stations), lat1, lng1, lat2, lng2 return [{"Stations":["14th \u0026 Howell Mill Rd","14th \u0026 Howell Mill Rd"],"Coords":[[33.8031772871,-84.50643562260001],[33.78588862492411,-84.41137697891648],[33.78588862492411,-84.41137697891648],[33.8237153622,-84.43450950559998]],"TotalCal":960.7779208996385,"TotalTime":7667.820597762477}]|
 
+### Test
+- We have 2 test files, one is _inputlist.txt_, which tests randomed distributed origin points and destinaion points around Atlanta city. The other is _intputlistMarta.txt_ which is another test file with randomed origin points and ends at randomed selected Marata stations. 
+
+- How to run the test, run the following command and you should be able to see the output.txt after a while. You should be able to see the 1st rank route result from test cases and the total runtime at the end.
+```
+python testK.py K_VALUE
+```
+
+
+
+
